@@ -28,6 +28,7 @@ void actualizar();
 void eliminar();
 void ordenar();
 bool codigoExiste(int codigo);
+int buscarIndice(int codigo);
 
 int main()
 {
@@ -52,31 +53,24 @@ int main()
 			case 1:
             	registrar();
             	break;
-            
         	case 2:
             	mostrar();
             	break;
-            
             case 3:
             	buscar();
             	break;
-            	
             case 4:
             	actualizar();
             	break;
-            
             case 5:
             	eliminar();
             	break;
-            	
             case 6:
             	ordenar();
             	break;
-				
 			case 7:
             	cout <<"Saliendo..." << endl;
-            	break;		
-
+            	break;	
             default:
 				cout<<"Opción inválida"<<endl;	
 		}
@@ -155,44 +149,36 @@ void mostrar()
 
 void buscar()
 {
-	// Búsqueda secuencial
-	// Recorre la lista buscando coincidencias de código
+	// Solicita un código y utiliza buscarIndice()
+	// para localizar la canción en la lista
 	int codigoBuscado;
-	bool encontrado = false;
 	
 	cout<<"\n======= BUSCAR CANCIÓN ======="<<endl;
 	
 	cout<<"Ingrese el código: ";
 	cin>> codigoBuscado;
 	
-	for(int i=0; i<totalCanciones; i++)
-	{
-		if(lista[i].codigo == codigoBuscado)
-		{
-			cout<<"\n======== Canción encontrada: "<<endl;
-			
-			cout<<"Código: "<<lista[i].codigo<<endl;
-			cout<<"Título: "<<lista[i].titulo<<endl;
-			cout<<"Artista: "<<lista[i].artista<<endl;
-			cout<<"Género: "<<lista[i].genero<<endl;
-			cout<<"Duración: "<<lista[i].duracion<<"min"<<endl;
-			
-			encontrado = true;
-			break; 
-		}
-	}
+	int indice = buscarIndice(codigoBuscado);
 	
-	if(!encontrado)
+	if(indice != -1)
+	{
+		cout<<"\n===== Canción encontrada ====="<<endl;
+		
+		cout<<"Código: "<<lista[indice].codigo<<endl;
+		cout<<"Título: "<<lista[indice].titulo<<endl;
+		cout<<"Artista: "<<lista[indice].artista<<endl;
+		cout<<"Género: "<<lista[indice].genero<<endl;
+		cout<<"Duración: "<<lista[indice].duracion<<" min"<<endl;
+	}
+	else
 	{
 		cout<<"Canción no encontrada."<<endl;
 	}
-	
 }
 
 void actualizar()
 {
 	int codigoBuscado;
-	bool encontrado = false;
 	
 	cout<<"\n===== ACTUALIZAR CANCIÓN ====="<<endl;
 	
@@ -201,69 +187,58 @@ void actualizar()
 	
 	cin.ignore();
 	
+	int indice=buscarIndice(codigoBuscado);
+	
 	// Modifica los datos de la canción encontrada
-	for(int i=0; i<totalCanciones; i++)
+	if(indice!=-1)
 	{
-		if(lista[i].codigo==codigoBuscado)
-		{
-			cout<<"\nIngrese los nuevos datos: "<<endl;
-			
-			cout<<"Nuevo título: ";
-			getline(cin, lista[i].titulo);
-			
-			cout<<"Nuevo artista: ";
-			getline(cin, lista[i].artista);
-			
-			cout<<"Nuevo género: ";
-			getline(cin, lista[i].genero);
-			
-			cout<<"Nueva duración: ";
-			cin>>lista[i].duracion;
-			
-			encontrado=true;
-			
-			cout<<"\nCanción actualizada correctamente."<<endl;
-			
-			break;
-		}
+		cout<<"\nIngrese los nuevos datos: "<<endl;
+		
+		cout<<"Nuevo título: ";
+		getline(cin, lista[indice].titulo);
+		
+		cout<<"Nuevo artista: ";
+		getline(cin, lista[indice].artista);
+		
+		cout<<"Nuevo género: ";
+		getline(cin, lista[indice].genero);
+		
+		cout<<"Nueva duración: ";
+		cin>>lista[indice].duracion;
+		
+		cout<<"\nCanción actualizada correctamente."<<endl;
 	}
-	if(!encontrado)
+	else
 	{
 		cout<<"Canción no encontrada."<<endl;
 	}
+	
 }
 
 void eliminar()
 {
 	int codigoBuscado;
-	bool encontrado=false;
 	
-	cout<<"\n====== ELIMINAR CANCIÓN ======"<<endl;
 	
 	cout<<"Ingrese el código de la canción: ";
 	cin>>codigoBuscado;
 	
+	int indice=buscarIndice(codigoBuscado);
+	
 	// Buscar canción por código
-	for(int i=0; i<totalCanciones; i++)
+	if(indice!=-1)
 	{
-		if(lista[i].codigo==codigoBuscado)
+		// Desplaza los elelmentos para llenar el espacio vacio
+		for(int j=indice; j<totalCanciones-1; j++)
 		{
-			// Desplaza los elementos hacia la izquierda
-			for(int j=i; j<totalCanciones-1; j++)
-			{
-				lista[j]=lista[j+1];
-			}
-			
-			// Reduce la cantidad de canciones 
-			totalCanciones--;
-			encontrado=true;
-			
-			cout<<"\nCanción eliminada correctamente."<<endl;
-			
-			break;
+			lista[j]=lista[j+1];
 		}
+		
+		totalCanciones--;
+		
+		cout<<"\nCanción eliminada correctamente."<<endl;
 	}
-	if(!encontrado)
+	else
 	{
 		cout<<"Canción no encontrada."<<endl;
 	}
@@ -306,22 +281,16 @@ bool codigoExiste(int codigo)
 	return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Devuelve la posición de la canción si existe.
+// Si no la encuentra, devuelve -1.
+int buscarIndice(int codigo)
+{
+	for(int i=0; i<totalCanciones; i++)
+	{
+		if(lista[i].codigo==codigo)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
