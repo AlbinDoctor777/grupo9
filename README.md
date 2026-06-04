@@ -50,7 +50,7 @@ Permite ordenar alfabéticamente las canciones según su título.
 
 ## Integrantes
 
-* Jamil
+* Jamil Garcia Felices
 * Nombre del compañero
 
 ## Curso
