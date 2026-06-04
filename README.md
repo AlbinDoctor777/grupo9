@@ -51,7 +51,8 @@ Permite ordenar alfabéticamente las canciones según su título.
 ## Integrantes
 
 * Jamil Garcia Felices
-* Nombre del compañero
+* Peña Vallejos Luis Fernando
+
 
 ## Curso
 
